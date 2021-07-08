@@ -1,6 +1,6 @@
-name: 'Close issues with label'
-description: 'This is an Action that closes issues based on the provided label'
-author: 'Brian Douglas'
+name: 'Close expired issues with label'
+description: 'This is an Action that closes issues based on the provided label over expire days'
+author: 'YUKI "Piro" Hiroshi'
 branding:
   icon: 'archive'
   color: 'gray-dark'
