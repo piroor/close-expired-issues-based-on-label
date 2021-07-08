@@ -1,5 +1,5 @@
-# Close issues based on a label
-This is an Action that closes issues based on the provided label.
+# Close expired issues based on a label
+This is an Action that closes expired issues based on the provided label.
 
 ## Usage
 
@@ -9,15 +9,16 @@ To test this GitHub Action, replace the `LABEL` variable with one you want to ch
 on:
   schedule:
   - cron: 0 5 * * 3 
-name: Weekly Issue Closure
+name: Weekly Expired Issue Closure
 jobs:
   cycle-weekly-close:
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@master
-    - name: weekly-issue-closure
-      uses: bdougie/close-issues-based-on-label@master
+    - name: weekly-expired-issue-closure
+      uses: piroor/close-expired-issues-based-on-label@master
       env:
         LABEL: wontfix
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        EXPIRE_DAYS: 7
 ```
