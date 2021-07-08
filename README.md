@@ -1,5 +1,5 @@
 # Close expired issues based on a label
-This is an Action that closes expired issues based on the provided label.
+This is an Action that closes expired issues based on the provided label, based on [bdougie/close-issues-based-on-label](https://github.com/bdougie/close-issues-based-on-label).
 
 ## Usage
 
