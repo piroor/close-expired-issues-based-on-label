@@ -27,7 +27,7 @@ open_issues.each do |issue|
   past_seconds = now - last_labeled_event.created_at.to_i
   if past_seconds > expire_days_in_seconds
     p " => close"
-    #client.close_issue(repo, issue.number)
+    client.close_issue(repo, issue.number)
   else
     p " => not expired yet"
   end
