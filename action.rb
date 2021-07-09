@@ -2,7 +2,7 @@ require 'octokit'
 
 repo = ENV["GITHUB_REPOSITORY"]
 label = ENV["LABEL"]
-exception_labels = (ENV["EXCEPTION_LABELS"] || "").split(",").collect{|label| label.strip }
+exception_labels = (ENV["LABEL_EXCEPTIONS"] || "").split(",").collect{|label| label.strip }
 expire_days = ENV["EXPIRE_DAYS"]
 p "ENV:"
 pp ENV
