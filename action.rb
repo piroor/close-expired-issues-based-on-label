@@ -2,7 +2,7 @@ require 'octokit'
 
 repo = ENV["GITHUB_REPOSITORY"]
 label = ENV["LABEL"]
-exception_label = ENV["EXCEPTION_LABEL"]
+exception_labels = (ENV["EXCEPTION_LABELS"] || "").split(",").collect{|label| label.strip }
 expire_days = ENV["EXPIRE_DAYS"]
 
 client = Octokit::Client.new(:access_token => ENV["GITHUB_TOKEN"])
@@ -14,7 +14,7 @@ now = Time.new.to_i
 expire_days_in_seconds = expire_days.to_i * 60 * 60 * 24
 
 open_issues.each do |issue|
-  if exception_label and issue.labels.any?{|label| label.name == exception_label }
+  if not exception_labels.empty? and issue.labels.any?{|label| exception_labels.any?(label.name) }
     next
   end
   timeline = client.issue_timeline(repo, issue.number)
