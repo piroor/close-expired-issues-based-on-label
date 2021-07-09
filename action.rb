@@ -4,6 +4,8 @@ repo = ENV["GITHUB_REPOSITORY"]
 label = ENV["LABEL"]
 exception_labels = (ENV["EXCEPTION_LABELS"] || "").split(",").collect{|label| label.strip }
 expire_days = ENV["EXPIRE_DAYS"]
+p "ENV:"
+pp ENV
 
 client = Octokit::Client.new(:access_token => ENV["GITHUB_TOKEN"])
 client.auto_paginate = true
@@ -27,7 +29,7 @@ open_issues.each do |issue|
   past_seconds = now - last_labeled_event.created_at.to_i
   if past_seconds > expire_days_in_seconds
     p " => close"
-    client.close_issue(repo, issue.number)
+    #client.close_issue(repo, issue.number)
   else
     p " => not expired yet"
   end
