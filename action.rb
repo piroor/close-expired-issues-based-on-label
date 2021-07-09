@@ -10,7 +10,7 @@ client.auto_paginate = true
 open_issues = client.list_issues(repo, { :labels => label, :state => "open" })
 
 now = Time.new.to_i
-expire_days_in_seconds = expire_days * 60 * 60 * 24
+expire_days_in_seconds = expire_days.to_i * 60 * 60 * 24
 
 open_issues.each do |issue|
   timeline = client.issue_timeline(repo, issue.number)
