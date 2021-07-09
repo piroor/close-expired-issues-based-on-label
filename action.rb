@@ -2,10 +2,8 @@ require 'octokit'
 
 repo = ENV["GITHUB_REPOSITORY"]
 label = ENV["LABEL"]
-exception_labels = (ENV["KEEP_OPEN_LABELS"] || "").split(",").collect{|label| label.strip }
+exception_labels = (ENV["EXCEPTION_LABELS"] || "").split(",").collect{|label| label.strip }
 expire_days = ENV["EXPIRE_DAYS"]
-p "ENV:"
-pp ENV
 
 client = Octokit::Client.new(:access_token => ENV["GITHUB_TOKEN"])
 client.auto_paginate = true

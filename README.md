@@ -19,7 +19,7 @@ jobs:
       uses: piroor/close-expired-issues-based-on-label@master
       env:
         LABEL: wontfix
+        EXCEPTION_LABELS: in-progress, help wanted
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         EXPIRE_DAYS: 7
-        KEEP_OPEN_LABELS: in-progress
 ```
