@@ -15,6 +15,7 @@ p " => #{open_issues.size} issues found"
 now = Time.new.to_i
 expire_days_in_seconds = expire_days.to_i * 60 * 60 * 24
 
+p "Checking issues with expire days #{expire_days} and exception labels #{exception_labels.join(", ")}"
 open_issues.each do |issue|
   p "Issue #{issue.number} (#{issue.labels.collect{|label| label.name }.join(", ")})"
   if not exception_labels.empty? and issue.labels.any?{|label| exception_labels.any?(label.name) }
