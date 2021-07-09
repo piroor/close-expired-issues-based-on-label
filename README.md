@@ -21,4 +21,5 @@ jobs:
         LABEL: wontfix
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         EXPIRE_DAYS: 7
+        KEEP_OPEN_LABELS: in-progress
 ```
