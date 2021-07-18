@@ -4,6 +4,7 @@ repo = ENV["GITHUB_REPOSITORY"]
 label = ENV["LABEL"]
 exception_labels = (ENV["EXCEPTION_LABELS"] || "").split(",").collect{|label| label.strip }
 expire_days = ENV["EXPIRE_DAYS"] || 0
+comment = ENV["COMMENT"] || "This issue has been closed due to no response in #{expire_days} days after labeled as \"#{label}\"."
 
 client = Octokit::Client.new(:access_token => ENV["GITHUB_TOKEN"])
 client.auto_paginate = true
@@ -28,6 +29,7 @@ open_issues.each do |issue|
   if past_seconds > expire_days_in_seconds
     p " => close"
     client.close_issue(repo, issue.number)
+    client.add_comment(repo, issue.number, comment)
   else
     p " => not expired yet"
   end

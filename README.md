@@ -30,6 +30,7 @@ jobs:
         LABEL: wontfix
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         EXPIRE_DAYS: 7
+        COMMENT: This issue has been closed due to no response in 7 days after labeled as "wontfix".
     - name: close partially-fixed issues
       uses: piroor/close-expired-issues-based-on-label@master
       env:
@@ -37,4 +38,5 @@ jobs:
         EXCEPTION_LABELS: in-progress, help wanted
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         EXPIRE_DAYS: 7
+        COMMENT: This issue has been closed due to no response in 7 days after labeled as "partially-fixed".
 ```
