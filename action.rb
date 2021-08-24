@@ -42,7 +42,7 @@ open_issues.each do |issue|
     next
   end
 
-  last_commented_event = timeline.select{|event| event.event == "commented" }.last
+  last_commented_event = timeline.select{|event| event.event == "commented" and event.user.type != "Bot" }.last
   if last_commented_event and now - last_commented_event.created_at.to_i <= extend_days_by_commented_in_seconds
     p " => not expired yet (from last commented)"
     next
