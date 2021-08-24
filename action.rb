@@ -4,7 +4,9 @@ repo = ENV["GITHUB_REPOSITORY"]
 label = ENV["LABEL"]
 exception_labels = (ENV["EXCEPTION_LABELS"] || "").split(",").collect{|label| label.strip }
 expire_days = ENV["EXPIRE_DAYS"] || 0
-comment = ENV["COMMENT"] || "This issue has been closed due to no response in #{expire_days} days after labeled as \"#{label}\"."
+extend_days_by_reopened = ENV["EXTEND_DAYS_BY_REOPENED"] || expire_days
+extend_days_by_commented = ENV["EXTEND_DAYS_BY_COMMENTED"] || expire_days
+comment = ENV["COMMENT"] || "This issue has been closed due to no response within #{expire_days} days after labeled as \"#{label}\", #{extend_days_by_reopened} days after last reopened, and #{extend_days_by_commented} days after last commented."
 
 client = Octokit::Client.new(:access_token => ENV["GITHUB_TOKEN"])
 client.auto_paginate = true
@@ -15,6 +17,8 @@ p " => #{open_issues.size} issues found"
 
 now = Time.new.to_i
 expire_days_in_seconds = expire_days.to_i * 60 * 60 * 24
+extend_days_by_reopened_in_seconds = extend_days_by_reopened.to_i * 60 * 60 * 24
+extend_days_by_commented_in_seconds = extend_days_by_commented.to_i * 60 * 60 * 24
 
 p "Checking issues with expire days #{expire_days} and exception labels #{exception_labels.join(", ")}"
 open_issues.each do |issue|
@@ -25,11 +29,6 @@ open_issues.each do |issue|
   end
   timeline = client.issue_timeline(repo, issue.number)
 
-  last_reopened_event = timeline.select{|event| event.event == "reopened" }.last
-  if last_reopened_event and now - last_reopened_event.created_at.to_i <= expire_days_in_seconds
-    p " => not expired yet (from reopened after expired)"
-    next
-  end
 
   last_labeled_event = timeline.select{|event| event.event == "labeled" }.last
   if last_labeled_event and now - last_labeled_event.created_at.to_i <= expire_days_in_seconds
@@ -37,8 +36,14 @@ open_issues.each do |issue|
     next
   end
 
+  last_reopened_event = timeline.select{|event| event.event == "reopened" }.last
+  if last_reopened_event and now - last_reopened_event.created_at.to_i <= extend_days_by_reopened_in_seconds
+    p " => not expired yet (from reopened after expired)"
+    next
+  end
+
   last_commented_event = timeline.select{|event| event.event == "commented" }.last
-  if last_commented_event and now - last_commented_event.created_at.to_i <= expire_days_in_seconds
+  if last_commented_event and now - last_commented_event.created_at.to_i <= extend_days_by_commented_in_seconds
     p " => not expired yet (from last commented)"
     next
   end
