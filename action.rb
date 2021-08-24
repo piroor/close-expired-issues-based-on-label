@@ -24,23 +24,26 @@ open_issues.each do |issue|
     next
   end
   timeline = client.issue_timeline(repo, issue.number)
-  last_labeled_event  = timeline.select{|event| event.event == "labeled" }.last
-  past_seconds_from_labeled  = now - last_labeled_event.created_at.to_i
 
   last_reopened_event = timeline.select{|event| event.event == "reopened" }.last
-  if last_labeled_event
-    past_seconds_from_reopened = now - last_labeled_event.created_at.to_i
-    if past_seconds_from_reopened > past_seconds_from_labeled
-      p " => reopened after expired"
-      next
-    end
+  if last_labeled_event and now - last_reopened_event.created_at.to_i <= expire_days_in_seconds
+    p " => not expired yet (from reopened after expired)"
+    next
   end
 
-  if past_seconds_from_labeled > expire_days_in_seconds
-    p " => close"
-    client.close_issue(repo, issue.number)
-    client.add_comment(repo, issue.number, comment)
-  else
-    p " => not expired yet"
+  last_labeled_event = timeline.select{|event| event.event == "labeled" }.last
+  if last_labeled_event and now - last_labeled_event.created_at.to_i <= expire_days_in_seconds
+    p " => not expired yet (from last labeled)"
+    next
   end
+
+  last_commented_event = timeline.select{|event| event.event == "commented" }.last
+  if last_commented_event and now - last_commented_event.created_at.to_i <= expire_days_in_seconds
+    p " => not expired yet (from last commented)"
+    next
+  end
+
+  p " => close"
+  client.close_issue(repo, issue.number)
+  client.add_comment(repo, issue.number, comment)
 end
