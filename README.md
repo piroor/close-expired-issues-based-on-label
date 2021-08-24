@@ -9,6 +9,8 @@ This action takes four parameters via environment variables.
 
 * `LABEL` (string): The name of a label for closable issues.
 * `EXPIRE_DAYS` (integer, default = `0`): The number of days waiting to close issues after the last label is given.
+* `EXTEND_DAYS_BY_REOPENED` (integer, default = same to `EXPIRE_DAYS`): The number of days waiting to close issues after last reopened by someone.
+* `EXTEND_DAYS_BY_COMMENTED` (integer, default = same to `EXPIRE_DAYS`): The number of days waiting to close issues after last commented by someone.
 * `EXCEPTION_LABELS` (commma separated strings): Names of labels which block closing of issues.
 * `GITHUB_TOKEN (string): This must be `${{ secrets.GITHUB_TOKEN }}`.
 
@@ -30,7 +32,9 @@ jobs:
         LABEL: wontfix
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         EXPIRE_DAYS: 7
-        COMMENT: This issue has been closed due to no response in 7 days after labeled as "wontfix".
+        EXTEND_DAYS_BY_REOPENED: 3
+        EXTEND_DAYS_BY_COMMENTED: 3
+        COMMENT: This issue has been closed due to no response within 7 days after labeled as "wontfix", 3 days after last reopened, or 3 days after last commented.
     - name: close partially-fixed issues
       uses: piroor/close-expired-issues-based-on-label@master
       env:
@@ -38,5 +42,7 @@ jobs:
         EXCEPTION_LABELS: in-progress, help wanted
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         EXPIRE_DAYS: 7
-        COMMENT: This issue has been closed due to no response in 7 days after labeled as "partially-fixed".
+        EXTEND_DAYS_BY_REOPENED: 3
+        EXTEND_DAYS_BY_COMMENTED: 3
+        COMMENT: This issue has been closed due to no response within 7 days after labeled as "partially-fixed", 3 days after last reopened, or 3 days after last commented.
 ```
