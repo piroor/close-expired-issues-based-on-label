@@ -29,7 +29,6 @@ open_issues.each do |issue|
   end
   timeline = client.issue_timeline(repo, issue.number)
 
-
   last_labeled_event = timeline.select{|event| event.event == "labeled" }.last
   if last_labeled_event and now - last_labeled_event.created_at.to_i <= expire_days_in_seconds
     p " => not expired yet (from last labeled)"
