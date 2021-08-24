@@ -26,7 +26,7 @@ open_issues.each do |issue|
   timeline = client.issue_timeline(repo, issue.number)
 
   last_reopened_event = timeline.select{|event| event.event == "reopened" }.last
-  if last_labeled_event and now - last_reopened_event.created_at.to_i <= expire_days_in_seconds
+  if last_reopened_event and now - last_reopened_event.created_at.to_i <= expire_days_in_seconds
     p " => not expired yet (from reopened after expired)"
     next
   end
