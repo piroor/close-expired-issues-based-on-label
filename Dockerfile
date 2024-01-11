@@ -1,4 +1,4 @@
-FROM ruby:latest-alpine
+FROM ruby:alpine
 
 ENV RUBY_PACKAGES bash curl-dev ruby-dev build-base git ruby ruby-io-console ruby-bundler ruby-json ruby-rdoc
 
