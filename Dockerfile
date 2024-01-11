@@ -1,4 +1,4 @@
-FROM andrius/alpine-ruby
+FROM ruby:3.0
 
 ENV RUBY_PACKAGES bash curl-dev ruby-dev build-base git ruby ruby-io-console ruby-bundler ruby-json ruby-rdoc
 
